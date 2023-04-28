@@ -5,7 +5,7 @@
 ### Install `protoc-gen-go-http`
 
 ```bash
-go install github.com/fynntang/protobuf-gen-go/protoc-gen-go-http
+go install github.com/fynntang/protobuf-gen-go/protoc-gen-go-http@latest
 ```
 
 ### protoc command
@@ -20,7 +20,7 @@ protoc --proto_path=./ \
 ### Install `protoc-go-inject-tags`
 
 ```bash
-go install github.com/fynntang/protobuf-gen-go/protoc-go-inject-tags
+go install github.com/fynntang/protobuf-gen-go/protoc-go-inject-tags@latest
 
 ```
 
