@@ -1,4 +1,4 @@
-module github.com/fynntang/protoc-gen-go-tags
+module github.com/fynntang/protobuf-gen-go/protoc-go-inject-tags
 
 go 1.20
 
