@@ -148,7 +148,6 @@ func handleTags(fields *ast.FieldList) {
 		for _, tag := range sortTags {
 			newTags += fmt.Sprintf("%s:\"%s\" ", fieldTags[tag].tagName, fieldTags[tag].tagValue)
 		}
-		fmt.Printf("newTags: %s\n", newTags)
 		field.Tag.Value = fmt.Sprintf("`%s`", newTags)
 	}
 }
