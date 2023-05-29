@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"github.com/golang/protobuf/jsonpb"
 	"strings"
 	"text/template"
 )
@@ -74,7 +75,7 @@ func _{{$svrType}}_{{.Name}}{{.Num}}_HTTP_Handler(srv {{$svrType}}HTTPServer) gi
 
 		data = out
 		if message, ok := data.(proto.Message); ok {
-			t := jsonpb.Marshaler{EmitDefaults: true, OrigName: true}
+			t := jsonpb.Marshaler{EmitDefaults: true, OrigName: true, EnumsAsInts:true}
 			t.Marshal(&buffer, message)
 			json.Unmarshal(buffer.Bytes(), &newData)
 		} else {
@@ -125,5 +126,7 @@ func (s *serviceDesc) execute() string {
 	if err := tmpl.Execute(buf, s); err != nil {
 		panic(err)
 	}
+	jsonpb.Marshaler{}
+
 	return strings.Trim(buf.String(), "\r\n")
 }
