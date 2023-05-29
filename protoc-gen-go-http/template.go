@@ -68,7 +68,20 @@ func _{{$svrType}}_{{.Name}}{{.Num}}_HTTP_Handler(srv {{$svrType}}HTTPServer) gi
 			return
 		}
 
-		c.JSON(http.StatusOK, out{{.ResponseBody}})
+		var buffer bytes.Buffer
+		var data interface{}
+		var newData interface{}
+
+		data = out
+		if message, ok := data.(proto.Message); ok {
+			t := jsonpb.Marshaler{EmitDefaults: true, OrigName: true}
+			t.Marshal(&buffer, message)
+			json.Unmarshal(buffer.Bytes(), &newData)
+		} else {
+			newData = data
+		}
+
+		c.JSON(http.StatusOK, newData{{.ResponseBody}})
 	}
 }
 {{end}}
