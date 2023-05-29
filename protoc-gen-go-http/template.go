@@ -75,7 +75,7 @@ func _{{$svrType}}_{{.Name}}{{.Num}}_HTTP_Handler(srv {{$svrType}}HTTPServer) gi
 
 		data = out
 		if message, ok := data.(proto.Message); ok {
-			t := jsonpb.Marshaler{EmitDefaults: true, OrigName: true, EnumsAsInts:true}
+			t := jsonpb.Marshaler{EmitDefaults: true, OrigName: true, EnumsAsInts:false}
 			t.Marshal(&buffer, message)
 			json.Unmarshal(buffer.Bytes(), &newData)
 		} else {
