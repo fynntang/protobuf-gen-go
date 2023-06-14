@@ -26,7 +26,7 @@ func main() {
 			if !f.Generate {
 				continue
 			}
-			generateFile(gen, f, *omitempty)
+			generateDeliveriesFile(gen, f, *omitempty)
 		}
 		return nil
 	})

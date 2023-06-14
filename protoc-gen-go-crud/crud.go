@@ -6,6 +6,7 @@ import (
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
+	"log"
 	"net/http"
 	"os"
 	"regexp"
@@ -14,13 +15,19 @@ import (
 
 var methodSets = make(map[string]int)
 
-func generateFile(gen *protogen.Plugin, file *protogen.File, omitempty bool) *protogen.GeneratedFile {
+func generateDeliveriesFile(gen *protogen.Plugin, file *protogen.File, omitempty bool) *protogen.GeneratedFile {
 	if len(file.Services) == 0 || (omitempty && !hasHTTPRule(file.Services)) {
 		return nil
 	}
 
 	filePrefix := strings.Split(file.GeneratedFilenamePrefix, "/")
 	filename := "../internal/" + filePrefix[1] + "/deliveries/" + filePrefix[2] + ".go"
+
+	// 判断文件是否存在
+	if _, err := os.Stat(strings.TrimPrefix(filename, "../")); err == nil {
+		log.Println("文件已存在，跳过生成：", filename)
+		return nil
+	}
 
 	g := gen.NewGeneratedFile(filename, file.GoImportPath)
 
