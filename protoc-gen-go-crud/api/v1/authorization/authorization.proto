@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package authorizationV1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "v1/components/schemas.proto";
+import "v1/components/enum.proto";
+import "google/protobuf/empty.proto";
+
+
+
+option go_package = "github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/api/v1/authorization;authorizationV1";
+
+
+service Auth {
+  // 菜单列表
+  rpc ListMenus(google.protobuf.Empty) returns (Menus) {
+    option (google.api.http) = {get: "/v1/menus"};
+  }
+}
+
+message Menus {
+  repeated componentsV1.Menu list = 1;
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+
+package componentsV1;
+
+import "google/protobuf/descriptor.proto";
+
+option go_package = "github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/api/v1/components;componentsV1";
+
+message Dictionary {
+  string key = 1;
+  string value = 2;
+  string label = 3;
+}
+
+

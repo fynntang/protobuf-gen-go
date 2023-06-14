@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package componentsV1;
+
+import "google/protobuf/descriptor.proto";
+import "v1/components/dictionary.proto";
+
+option go_package = "github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/api/v1/components;componentsV1";
+
+
+
+enum EnableStatus {
+  // 默认值
+  ENABLE_STATUS_DEFAULT = 0;
+  // 启用
+  ENABLE = 1;
+  // 禁用
+  DISABLE = 2;
+}
+
+enum MenuType {
+  // 默认值
+  MENU_TYPE_DEFAULT = 0;
+  // 目录
+  DIRECTORY = 1;
+  // 菜单
+  MENU = 2;
+  // 按钮
+  BUTTON = 3;
+}
+
+enum MenuHidden {
+  // 默认值
+  MENU_HIDDEN_DEFAULT = 0;
+  // 隐藏
+  TRUE = 1;
+  // 显示
+  FALSE = 2;
+}

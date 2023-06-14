@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package authorizationV1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+import "v1/components/schemas.proto";
+import "v1/components/enum.proto";
+import "google/protobuf/empty.proto";
+
+
+
+option go_package = "github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/api/v1/authorization;authorizationV1";
+
+
+service Role {
+  // 角色列表
+  rpc ListRoles(ListRolesRequest) returns (Roles) {
+    option (google.api.http) = {get: "/v1/roles"};
+  }
+  // 新增角色
+  rpc CreateRole(CreateRoleRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {post: "/v1/roles" body: "*"};
+  }
+  // 更新角色
+  rpc UpdateRole(UpdateRoleRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {put: "/v1/roles/{id}" body: "*"};
+  }
+  // 查看角色详情
+  rpc GetRole(GetRoleRequest) returns (componentsV1.Role) {
+    option (google.api.http) = {get: "/v1/roles/{id}"};
+  }
+  // 角色启用/禁用
+  rpc EnableRole(EnableRoleRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {post: "/v1/roles/{id}/enable" body: "*"};
+  }
+}
+
+message ListRolesRequest {
+  // 角色名称
+  string name = 1 [(validate.rules).string = {
+    ignore_empty:true,
+//    pattern:   "[a-zA-Z0-9\u4e00-\u9fa5]+",
+  }];
+  // 状态
+  componentsV1.EnableStatus status = 2;
+  // 页码
+  int64 page = 5;
+  // 每页数量
+  int64 page_size = 6;
+}
+
+message Roles {
+  // 角色列表
+  repeated componentsV1.Role list = 1;
+  // 分页信息
+  componentsV1.PageInfo page_info = 2;
+}
+
+
+
+message CreateRoleRequest {
+  // 角色名称
+  string name = 1  [(validate.rules).string = {
+    // 禁止html标签输入
+    pattern:   "[a-zA-Z0-9\u4e00-\u9fa5]+",
+  }];
+  // 状态
+  componentsV1.EnableStatus status = 2;
+  // 功能权限
+  repeated string permissions = 3;
+  // 备注
+  string remark = 4 [(validate.rules).string = {
+    ignore_empty:true,
+    // 禁止html标签输入
+    pattern:   "[a-zA-Z0-9\u4e00-\u9fa5]+",
+  }];
+}
+
+message UpdateRoleRequest {
+  // 角色Id
+  string id = 1;
+  // 角色名称
+  string name = 2  [(validate.rules).string = {
+    // 禁止html标签输入
+    pattern:   "[a-zA-Z0-9\u4e00-\u9fa5]+",
+  }];
+  // 功能权限
+  repeated string permissions = 3;
+  // 备注
+  string remark = 4 [(validate.rules).string = {
+    ignore_empty:true,
+    // 禁止html标签输入
+    pattern:   "[a-zA-Z0-9\u4e00-\u9fa5]+",
+  }];
+}
+
+message GetRoleRequest {
+  // 角色ID
+  string id = 1;
+}
+
+message GetRoleReply {
+  // 角色名称
+  string name = 1;
+  // 功能权限
+  repeated string permissions = 2;
+  // 备注
+  string remark = 3;
+  // 状态
+  componentsV1.EnableStatus status = 4;
+}
+
+message EnableRoleRequest {
+  // 角色ID
+  string id = 1;
+  // 状态
+  componentsV1.EnableStatus status = 2;
+}
