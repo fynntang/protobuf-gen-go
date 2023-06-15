@@ -2,6 +2,10 @@ package main
 
 import (
 	"flag"
+	"github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/deliveries"
+	"github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/entities"
+	"github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/repositories"
+	usecase "github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/usecase"
 	_ "github.com/gin-gonic/gin"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
@@ -26,7 +30,10 @@ func main() {
 			if !f.Generate {
 				continue
 			}
-			generateDeliveriesFile(gen, f, *omitempty)
+			deliveries.GenerateDeliveriesFile(gen, f, *omitempty)
+			usecase.GenerateUseCasesFile(gen, f, *omitempty)
+			entities.GenerateEntitiesFile(gen, f, *omitempty)
+			repositories.GenerateRespositoriesFile(gen, f, *omitempty)
 		}
 		return nil
 	})
