@@ -17,30 +17,34 @@ type I{{.ServiceType}}Repo interface {
 }
 
 
+{{$firstLetter := (GetFirstLetter .ServiceType)}}
+{{$entityName := (GetEntityName .ServiceType)}}
+
+
 type {{.ServiceType}}Repo struct {
 }
 
-func (m *{{.ServiceType}}Repo) DB(ctx context.Context) *gorm.DB {
+func ({{$firstLetter}} *{{.ServiceType}}Repo) DB(ctx context.Context) *gorm.DB {
 	return global.DBFromContext(ctx).Model(&entities.{{.ServiceType}}{})
 }
 
-func (m {{.ServiceType}}Repo) Create{{.ServiceType}}(ctx context.Context, {{.ServiceType}} *entities.{{.ServiceType}}) error {
+func ({{$firstLetter}} {{.ServiceType}}Repo) Create{{.ServiceType}}(ctx context.Context, {{$entityName}} *entities.{{.ServiceType}}) error {
 	panic("todo")
 }
 
-func (m {{.ServiceType}}Repo) Update{{.ServiceType}}(ctx context.Context, updateFields []string, {{.ServiceType}} *entities.{{.ServiceType}}) error {
+func ({{$firstLetter}} {{.ServiceType}}Repo) Update{{.ServiceType}}(ctx context.Context, updateFields []string, {{$entityName}} *entities.{{.ServiceType}}) error {
 	panic("todo")
 }
 
-func (m {{.ServiceType}}Repo) Get{{.ServiceType}}(ctx context.Context, id entity.ID) (*entities.{{.ServiceType}}, error) {
+func ({{$firstLetter}} {{.ServiceType}}Repo) Get{{.ServiceType}}(ctx context.Context, id entity.ID) (*entities.{{.ServiceType}}, error) {
 	panic("todo")
 }
 
-func (m {{.ServiceType}}Repo) Delete{{.ServiceType}}(ctx context.Context, id entity.ID) error {
+func ({{$firstLetter}} {{.ServiceType}}Repo) Delete{{.ServiceType}}(ctx context.Context, id entity.ID) error {
 	panic("todo")
 }
 
-func (m {{.ServiceType}}Repo) Get{{.ServiceType}}s(ctx context.Context, filter *database.Filter) (res []*entities.{{.ServiceType}}, count int64, err error) {
+func ({{$firstLetter}} {{.ServiceType}}Repo) Get{{.ServiceType}}s(ctx context.Context, filter *database.Filter) (res []*entities.{{.ServiceType}}, count int64, err error) {
 	panic("todo")
 }
 
@@ -80,6 +84,8 @@ func (s *serviceDesc) execute() string {
 	buf := new(bytes.Buffer)
 	tmpl, err := template.New("crud").Funcs(template.FuncMap{
 		"IsHasPackagePrefix": IsHasPackagePrefix,
+		"GetFirstLetter":     GetFirstLetter,
+		"GetEntityName":      GetEntityName,
 	}).Parse(strings.TrimSpace(crudTemplate))
 	if err != nil {
 		panic(err)
@@ -92,4 +98,12 @@ func (s *serviceDesc) execute() string {
 
 func IsHasPackagePrefix(s string) bool {
 	return strings.Contains(s, ".")
+}
+
+func GetFirstLetter(s string) string {
+	return strings.ToLower(s[0:1])
+}
+
+func GetEntityName(s string) string {
+	return strings.ToLower(s[0:1]) + s[1:]
 }
