@@ -1,0 +1,804 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "v1/users/users.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "Users"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/user": {
+      "get": {
+        "summary": "当前用户",
+        "operationId": "Users_User",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/componentsV1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "summary": "当前用户更新",
+        "operationId": "Users_UpdateCurrentUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/usersV1UpdateCurrentUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/user/password/change": {
+      "put": {
+        "summary": "当前用户修改密码",
+        "operationId": "Users_ChangePassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/usersV1ChangePasswordRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/user/upload-profile": {
+      "post": {
+        "summary": "上传头像",
+        "operationId": "Users_UploadProfile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usersV1UploadProfileResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/usersV1UploadProfileRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/users": {
+      "get": {
+        "summary": "用户列表",
+        "operationId": "Users_ListUsers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/usersV1ListUsersReply"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "nickname",
+            "description": "姓名",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "description": "邮箱",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "description": "手机号",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "description": "状态\n\n - ENABLE_STATUS_DEFAULT: 默认值\n - ENABLE: 启用\n - DISABLE: 禁用",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "enum": [
+              "ENABLE_STATUS_DEFAULT",
+              "ENABLE",
+              "DISABLE"
+            ],
+            "default": "ENABLE_STATUS_DEFAULT"
+          },
+          {
+            "name": "role_id",
+            "description": "角色ID",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "description": "页码",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          },
+          {
+            "name": "page_size",
+            "description": "每页数量",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      },
+      "post": {
+        "summary": "新增用户",
+        "operationId": "Users_CreateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/usersV1CreateUserRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/users/{id}": {
+      "get": {
+        "summary": "查看用户详情",
+        "operationId": "Users_GetUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/componentsV1User"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "用户ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "summary": "删除用户",
+        "operationId": "Users_DeleteUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "用户ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "summary": "更新用户",
+        "operationId": "Users_UpdateUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "用户ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "nickname": {
+                  "type": "string",
+                  "title": "[] 姓名"
+                },
+                "phone_code": {
+                  "type": "string",
+                  "title": "[] 手机区号"
+                },
+                "phone": {
+                  "type": "string",
+                  "title": "[] 手机号"
+                },
+                "avatar": {
+                  "type": "string",
+                  "title": "[] 头像"
+                },
+                "role_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "[] 角色IDs"
+                },
+                "timezone": {
+                  "type": "string",
+                  "title": "[] 时区"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/users/{id}/2fa/reset": {
+      "post": {
+        "summary": "重置2fa",
+        "operationId": "Users_Reset2FA",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "用户ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/users/{id}/activate": {
+      "post": {
+        "summary": "重新激活",
+        "operationId": "Users_ResetActivate",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "用户ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/users/{id}/enable": {
+      "post": {
+        "summary": "用户启用/禁用",
+        "operationId": "Users_EnableUser",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "用户ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "$ref": "#/definitions/componentsV1EnableStatus",
+                  "title": "状态"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/v1/users/{id}/password/reset": {
+      "post": {
+        "summary": "重置密码",
+        "operationId": "Users_ResetPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "description": "用户ID",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "tags": [
+          "Users"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "componentsV1Dictionary": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "componentsV1EnableStatus": {
+      "type": "string",
+      "enum": [
+        "ENABLE_STATUS_DEFAULT",
+        "ENABLE",
+        "DISABLE"
+      ],
+      "default": "ENABLE_STATUS_DEFAULT",
+      "title": "- ENABLE_STATUS_DEFAULT: 默认值\n - ENABLE: 启用\n - DISABLE: 禁用"
+    },
+    "componentsV1PageInfo": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "string",
+          "format": "int64",
+          "title": "当前页码"
+        },
+        "page_size": {
+          "type": "string",
+          "format": "int64",
+          "title": "每页数量"
+        },
+        "total": {
+          "type": "string",
+          "format": "int64",
+          "title": "总数量"
+        }
+      }
+    },
+    "componentsV1User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "用户ID"
+        },
+        "email": {
+          "type": "string",
+          "title": "邮箱"
+        },
+        "email_verified_at": {
+          "type": "string",
+          "title": "邮箱验证时间"
+        },
+        "nickname": {
+          "type": "string",
+          "title": "姓名"
+        },
+        "phone_code": {
+          "type": "string",
+          "title": "手机区号"
+        },
+        "phone": {
+          "type": "string",
+          "title": "手机号"
+        },
+        "avatar": {
+          "type": "string",
+          "title": "头像"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/componentsV1Dictionary"
+          },
+          "title": "角色"
+        },
+        "status": {
+          "$ref": "#/definitions/componentsV1EnableStatus",
+          "title": "状态"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "权限"
+        },
+        "timezone": {
+          "type": "string",
+          "title": "时区"
+        },
+        "created_at": {
+          "type": "string",
+          "title": "创建时间"
+        },
+        "created_by": {
+          "type": "string",
+          "title": "创建人"
+        },
+        "updated_at": {
+          "type": "string",
+          "title": "更新时间"
+        },
+        "updated_by": {
+          "type": "string",
+          "title": "更新人"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "usersV1ChangePasswordRequest": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "title": "密码"
+        }
+      }
+    },
+    "usersV1CreateUserRequest": {
+      "type": "object",
+      "properties": {
+        "nickname": {
+          "type": "string",
+          "title": "姓名"
+        },
+        "email": {
+          "type": "string",
+          "title": "邮箱"
+        },
+        "phone_code": {
+          "type": "string",
+          "title": "手机区号"
+        },
+        "phone": {
+          "type": "string",
+          "title": "手机号"
+        },
+        "enabled": {
+          "$ref": "#/definitions/componentsV1EnableStatus",
+          "title": "启用状态"
+        },
+        "role_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "角色IDs"
+        }
+      }
+    },
+    "usersV1ListUsersReply": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/componentsV1User"
+          },
+          "title": "用户列表"
+        },
+        "page_info": {
+          "$ref": "#/definitions/componentsV1PageInfo",
+          "title": "分页信息"
+        }
+      }
+    },
+    "usersV1UpdateCurrentUserRequest": {
+      "type": "object",
+      "properties": {
+        "nickname": {
+          "type": "string",
+          "title": "[] 姓名"
+        },
+        "phone_code": {
+          "type": "string",
+          "title": "[] 手机区号"
+        },
+        "phone": {
+          "type": "string",
+          "title": "[] 手机号"
+        },
+        "avatar": {
+          "type": "string",
+          "title": "[] 头像"
+        },
+        "timezone": {
+          "type": "string",
+          "title": "[] 时区"
+        }
+      }
+    },
+    "usersV1UploadProfileRequest": {
+      "type": "object",
+      "properties": {
+        "avatar": {
+          "type": "string",
+          "title": "图片信息"
+        }
+      }
+    },
+    "usersV1UploadProfileResponse": {
+      "type": "object",
+      "properties": {
+        "avatar_url": {
+          "type": "string",
+          "title": "头像路径"
+        }
+      }
+    }
+  }
+}

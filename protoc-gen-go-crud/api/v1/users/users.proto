@@ -1,0 +1,200 @@
+syntax = "proto3";
+
+package usersV1;
+
+import "google/api/annotations.proto";
+import "validate/validate.proto";
+
+import "google/protobuf/empty.proto";
+
+import "v1/components/schemas.proto";
+import "v1/components/enum.proto";
+
+option go_package = "bitbucket.org/antalphadev/earn/api/v1/users;usersV1";
+
+
+// 用户管理
+service Users {
+  // 用户列表
+  rpc ListUsers(ListUsersRequest) returns (ListUsersReply) {
+    option (google.api.http) = {get: "/v1/users"};
+  }
+  // 新增用户
+  rpc CreateUser(CreateUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {post: "/v1/users" body: "*"};
+  }
+  // 更新用户
+  rpc UpdateUser(UpdateUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {put: "/v1/users/{id}" body: "*"};
+  }
+  // 查看用户详情
+  rpc GetUser(GetUserRequest) returns (componentsV1.User) {
+    option (google.api.http) = {get: "/v1/users/{id}"};
+  }
+  // 删除用户
+  rpc DeleteUser(DeleteUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {delete: "/v1/users/{id}"};
+  }
+  // 上传头像
+  rpc UploadProfile(UploadProfileRequest) returns (UploadProfileResponse) {
+    option (google.api.http) = {post: "/v1/user/upload-profile" body: "*"};
+  }
+  // 重新激活
+  rpc ResetActivate(ResetActivateRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {post: "/v1/users/{id}/activate" body: "*"};
+  }
+  // 重置密码
+  rpc ResetPassword(ResetPasswordRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {post: "/v1/users/{id}/password/reset" body: "*"};
+  }
+  // 重置2fa
+  rpc Reset2FA(Reset2FARequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {post: "/v1/users/{id}/2fa/reset" body: "*"};
+  }
+  // 用户启用/禁用
+  rpc EnableUser(EnableUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {post: "/v1/users/{id}/enable" body: "*"};
+  }
+
+  // 当前用户
+  rpc User(google.protobuf.Empty) returns (componentsV1.User) {
+    option (google.api.http) = {get: "/v1/user"};
+  }
+  // 当前用户修改密码
+  rpc ChangePassword(ChangePasswordRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {put: "/v1/user/password/change" body: "*"};
+  }
+  // 当前用户更新
+  rpc UpdateCurrentUser(UpdateCurrentUserRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {put: "/v1/user" body: "*"};
+  }
+}
+
+message ListUsersRequest {
+  // 姓名
+  string nickname = 1 [(validate.rules).string = {
+    ignore_empty:true,
+    //    pattern:   "[a-zA-Z0-9\u4e00-\u9fa5]+",
+  }];
+  // 邮箱
+  string email = 2 [(validate.rules).string = {
+    ignore_empty:true,
+    //    pattern:   "[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+",
+  }];
+
+  // 手机号
+  string phone = 3 [(validate.rules).string = {
+    ignore_empty:true,
+    //    pattern:   "[0-9]+",
+    max_len:11,
+  }];
+  // 状态
+  componentsV1.EnableStatus status = 4;
+  // 角色ID
+  string role_id = 5;
+  // 页码
+  int64 page = 6;
+  // 每页数量
+  int64 page_size = 7;
+}
+
+message ListUsersReply {
+  // 用户列表
+  repeated componentsV1.User list = 1;
+  // 分页信息
+  componentsV1.PageInfo page_info = 2;
+}
+
+message CreateUserRequest {
+  // 姓名
+  string nickname = 1 [(validate.rules).string.min_len = 1, (validate.rules).string.max_len = 30];
+  // 邮箱
+  string email = 2 [(validate.rules).string.min_len = 1, (validate.rules).string.max_len = 128];
+  // 手机区号
+  string phone_code = 3 [(validate.rules).string.min_len = 1, (validate.rules).string.max_len = 10];
+  // 手机号
+  string phone = 4 [(validate.rules).string.min_len = 1, (validate.rules).string.max_len = 20];
+  // 启用状态
+  componentsV1.EnableStatus enabled = 5;
+  // 角色IDs
+  repeated string role_ids = 6;
+}
+
+message UpdateUserRequest {
+  // 用户ID
+  string id = 1;
+  // [] 姓名
+  string nickname = 2 [(validate.rules).string.max_len = 30];
+  // [] 手机区号
+  string phone_code = 3 [(validate.rules).string.max_len = 10];
+  // [] 手机号
+  string phone = 4 [(validate.rules).string.max_len = 20];
+  // [] 头像
+  string avatar = 5;
+  // [] 角色IDs
+  repeated string role_ids = 6;
+  // [] 时区
+  string timezone = 7;
+}
+
+message GetUserRequest {
+  // 用户ID
+  string id = 1;
+}
+
+message DeleteUserRequest {
+  // 用户ID
+  string id = 1;
+}
+
+message UploadProfileRequest{
+    // 图片信息
+    string avatar = 1;
+}
+
+message UploadProfileResponse{
+  // 头像路径
+  string avatar_url = 1;
+}
+
+message ResetActivateRequest {
+  // 用户ID
+  string id = 1;
+}
+
+message ResetPasswordRequest {
+  // 用户ID
+  string id = 1;
+}
+
+message ChangePasswordRequest {
+  // 密码
+  string password = 1;
+}
+
+
+message Reset2FARequest {
+  // 用户ID
+  string id = 1;
+}
+
+message EnableUserRequest {
+  // 用户ID
+  string id = 1;
+  // 状态
+  componentsV1.EnableStatus status = 2;
+}
+
+
+message UpdateCurrentUserRequest {
+  // [] 姓名
+  string nickname = 2;
+  // [] 手机区号
+  string phone_code = 3;
+  // [] 手机号
+  string phone = 4;
+  // [] 头像
+  string avatar = 5;
+  // [] 时区
+  string timezone = 6;
+}

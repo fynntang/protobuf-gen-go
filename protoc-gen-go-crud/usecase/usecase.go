@@ -1,4 +1,4 @@
-package deliveries
+package usecase
 
 import (
 	"fmt"

@@ -5,7 +5,7 @@ import (
 	"github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/deliveries"
 	"github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/entities"
 	"github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/repositories"
-	usecase "github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/usecase"
+	"github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/usecase"
 	_ "github.com/gin-gonic/gin"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/types/pluginpb"
@@ -14,6 +14,7 @@ import (
 var (
 	showVersion = flag.Bool("version", false, "print the version and exit")
 	omitempty   = flag.Bool("omitempty", true, "omit if google.api is empty")
+	wireMap     = map[string][]string{}
 )
 
 func main() {
@@ -34,7 +35,18 @@ func main() {
 			usecase.GenerateUseCasesFile(gen, f, *omitempty)
 			entities.GenerateEntitiesFile(gen, f, *omitempty)
 			repositories.GenerateRespositoriesFile(gen, f, *omitempty)
+
+			for _, v := range f.Services {
+				wireMap[string(v.Desc.FullName().Parent().Name())] = append(wireMap[string(v.Desc.Parent().Name())], string(v.Desc.FullName().Name()))
+			}
 		}
+
+		for k, v := range wireMap {
+			deliveries.GenerateWireFile(k, v)
+			usecase.GenerateWireFile(k, v)
+			repositories.GenerateWireFile(k, v)
+		}
+
 		return nil
 	})
 }
