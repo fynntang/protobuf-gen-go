@@ -8,12 +8,16 @@ import (
 
 var crudTemplate = `
 
+{{$firstLetter := (GetFirstLetter .ServiceType)}}
+
+
 type I{{.ServiceType}}Usecase interface {
 	Create{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Create{{.ServiceType}}Request) error
 	Update{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Update{{.ServiceType}}Request) error
 	Delete{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Delete{{.ServiceType}}Request) error
 	Get{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Get{{.ServiceType}}Request) (*entities.{{.ServiceType}},error)
-	List{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.List{{.ServiceType}}Request) ([]*entities.{{.ServiceType}},int64,error)	
+	List{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.List{{.ServiceType}}Request) ([]*entities.{{.ServiceType}},int64,error)
+	Log(ctx context.Context) *zap.SugaredLogger
 }
 
 type {{.ServiceType}}UseCase struct {
@@ -23,25 +27,30 @@ func New{{.ServiceType}}UseCase() I{{.ServiceType}}Usecase {
 	return &{{.ServiceType}}UseCase{}
 }
 
-func (r *{{.ServiceType}}UseCase) Create{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Create{{.ServiceType}}Request) error {
+func ({{$firstLetter}} *{{.ServiceType}}UseCase) Create{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Create{{.ServiceType}}Request) error {
 	panic("todo")
 }
 
-func (r *{{.ServiceType}}UseCase) Update{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Update{{.ServiceType}}Request) error {
+func ({{$firstLetter}} *{{.ServiceType}}UseCase) Update{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Update{{.ServiceType}}Request) error {
 	panic("todo")
 }
 
-func (r *{{.ServiceType}}UseCase) Delete{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Delete{{.ServiceType}}Request) error{
+func ({{$firstLetter}} *{{.ServiceType}}UseCase) Delete{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Delete{{.ServiceType}}Request) error{
 	panic("todo")
 }
 
-func (r *{{.ServiceType}}UseCase) Get{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Get{{.ServiceType}}Request) (*entities.{{.ServiceType}},error){
+func ({{$firstLetter}} *{{.ServiceType}}UseCase) Get{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Get{{.ServiceType}}Request) (*entities.{{.ServiceType}},error){
 	panic("todo")
 }
 
-func (r *{{.ServiceType}}UseCase) List{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.List{{.ServiceType}}Request) ([]*entities.{{.ServiceType}},int64,error){
+func ({{$firstLetter}} *{{.ServiceType}}UseCase) List{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.List{{.ServiceType}}Request) ([]*entities.{{.ServiceType}},int64,error){
 	panic("todo")
 }
+
+func ({{$firstLetter}} {{.ServiceType}}UseCase) Log(ctx context.Context) *zap.SugaredLogger {
+	return global.Logger(ctx).Named("{{.ServiceType}}Repo")
+}
+
 `
 
 type serviceDesc struct {
@@ -78,6 +87,7 @@ func (s *serviceDesc) execute() string {
 	buf := new(bytes.Buffer)
 	tmpl, err := template.New("crud").Funcs(template.FuncMap{
 		"IsHasPackagePrefix": IsHasPackagePrefix,
+		"GetFirstLetter":     GetFirstLetter,
 	}).Parse(strings.TrimSpace(crudTemplate))
 	if err != nil {
 		panic(err)
@@ -90,4 +100,8 @@ func (s *serviceDesc) execute() string {
 
 func IsHasPackagePrefix(s string) bool {
 	return strings.Contains(s, ".")
+}
+
+func GetFirstLetter(s string) string {
+	return strings.ToLower(s[0:1])
 }

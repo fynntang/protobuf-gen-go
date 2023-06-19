@@ -8,22 +8,26 @@ import (
 type RoleService struct {
 }
 
-func (a RoleService) CreateRole(*gin.Context, *authorizationV1.CreateRoleRequest) (*empty.Empty, error) {
+func (r RoleService) CreateRole(c *gin.Context, in *authorizationV1.CreateRoleRequest) (*empty.Empty, error) {
 	panic("todo")
 }
 
-func (a RoleService) EnableRole(*gin.Context, *authorizationV1.EnableRoleRequest) (*empty.Empty, error) {
+func (r RoleService) EnableRole(c *gin.Context, in *authorizationV1.EnableRoleRequest) (*empty.Empty, error) {
 	panic("todo")
 }
 
-func (a RoleService) GetRole(*gin.Context, *authorizationV1.GetRoleRequest) (*components.Role, error) {
+func (r RoleService) GetRole(c *gin.Context, in *authorizationV1.GetRoleRequest) (*components.Role, error) {
 	panic("todo")
 }
 
-func (a RoleService) ListRoles(*gin.Context, *authorizationV1.ListRolesRequest) (*authorizationV1.Roles, error) {
+func (r RoleService) ListRoles(c *gin.Context, in *authorizationV1.ListRolesRequest) (*authorizationV1.Roles, error) {
 	panic("todo")
 }
 
-func (a RoleService) UpdateRole(*gin.Context, *authorizationV1.UpdateRoleRequest) (*empty.Empty, error) {
+func (r RoleService) UpdateRole(c *gin.Context, in *authorizationV1.UpdateRoleRequest) (*empty.Empty, error) {
 	panic("todo")
+}
+
+func (r RoleService) Log(c *gin.Context) *zap.SugaredLogger {
+	return global.Logger(ctx).Named("RoleRepo")
 }

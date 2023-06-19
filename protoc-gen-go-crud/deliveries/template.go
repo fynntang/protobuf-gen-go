@@ -10,6 +10,7 @@ var crudTemplate = `
 type {{.ServiceType}}Service struct {
 }
 
+{{$firstLetter := (GetFirstLetter .ServiceType)}}
 {{$svrType := .ServiceType}}
 {{$svrName := .ServiceName}}
 {{- range .MethodSets}}
@@ -25,12 +26,15 @@ type {{.ServiceType}}Service struct {
 {{$reply = printf "%s.%s" .PackageName .Reply}}
 {{- end}}
 
-func (a {{$svrType}}Service){{.OriginalName}}(*gin.Context, *{{$request}})(*{{$reply}},error) {
+func ({{$firstLetter}} {{$svrType}}Service){{.OriginalName}}(c *gin.Context, in *{{$request}})(*{{$reply}},error) {
 	panic("todo")
 }
-
-
 {{- end}}
+
+func ({{$firstLetter}} {{.ServiceType}}Service) Log(c *gin.Context) *zap.SugaredLogger {
+	return global.Logger(ctx).Named("{{.ServiceType}}Repo")
+}
+
 `
 
 type serviceDesc struct {
@@ -66,6 +70,7 @@ func (s *serviceDesc) execute() string {
 	buf := new(bytes.Buffer)
 	tmpl, err := template.New("crud").Funcs(template.FuncMap{
 		"IsHasPackagePrefix": IsHasPackagePrefix,
+		"GetFirstLetter":     GetFirstLetter,
 	}).Parse(strings.TrimSpace(crudTemplate))
 	if err != nil {
 		panic(err)
@@ -78,4 +83,8 @@ func (s *serviceDesc) execute() string {
 
 func IsHasPackagePrefix(s string) bool {
 	return strings.Contains(s, ".")
+}
+
+func GetFirstLetter(s string) string {
+	return strings.ToLower(s[0:1])
 }

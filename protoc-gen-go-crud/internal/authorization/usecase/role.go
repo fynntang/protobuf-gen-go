@@ -6,6 +6,7 @@ type IRoleUsecase interface {
 	DeleteRole(ctx context.Context, in *authorizationV1.DeleteRoleRequest) error
 	GetRole(ctx context.Context, in *authorizationV1.GetRoleRequest) (*entities.Role, error)
 	ListRole(ctx context.Context, in *authorizationV1.ListRoleRequest) ([]*entities.Role, int64, error)
+	Log(ctx context.Context) *zap.SugaredLogger
 }
 
 type RoleUseCase struct {
@@ -33,4 +34,8 @@ func (r *RoleUseCase) GetRole(ctx context.Context, in *authorizationV1.GetRoleRe
 
 func (r *RoleUseCase) ListRole(ctx context.Context, in *authorizationV1.ListRoleRequest) ([]*entities.Role, int64, error) {
 	panic("todo")
+}
+
+func (r RoleUseCase) Log(ctx context.Context) *zap.SugaredLogger {
+	return global.Logger(ctx).Named("RoleRepo")
 }
