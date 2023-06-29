@@ -14,7 +14,7 @@ type TemplateParams struct {
 
 func GenerateWireFile(path string, sets []string) error {
 	// 定义模板
-	tmpl := `package deliveries
+	tmpl := `package usecase
 
 import "github.com/google/wire"
 

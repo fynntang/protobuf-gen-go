@@ -11,7 +11,7 @@ var crudTemplate = `
 {{$firstLetter := (GetFirstLetter .ServiceType)}}
 
 
-type I{{.ServiceType}}Usecase interface {
+type I{{.ServiceType}}UseCase interface {
 	Create{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Create{{.ServiceType}}Request) error
 	Update{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Update{{.ServiceType}}Request) error
 	Delete{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Delete{{.ServiceType}}Request) error
@@ -23,7 +23,7 @@ type I{{.ServiceType}}Usecase interface {
 type {{.ServiceType}}UseCase struct {
 }
 
-func New{{.ServiceType}}UseCase() I{{.ServiceType}}Usecase {
+func New{{.ServiceType}}UseCase() I{{.ServiceType}}UseCase {
 	return &{{.ServiceType}}UseCase{}
 }
 

@@ -14,7 +14,7 @@ option go_package = "bitbucket.org/antalphadev/earn/api/v1/users;usersV1";
 
 
 // 用户管理
-service Users {
+service User {
   // 用户列表
   rpc ListUsers(ListUsersRequest) returns (ListUsersReply) {
     option (google.api.http) = {get: "/v1/users"};
