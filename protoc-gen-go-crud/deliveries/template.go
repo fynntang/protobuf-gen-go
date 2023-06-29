@@ -32,7 +32,7 @@ func ({{$firstLetter}} {{$svrType}}Service){{.OriginalName}}(c *gin.Context, in 
 {{- end}}
 
 func ({{$firstLetter}} {{.ServiceType}}Service) Log(c *gin.Context) *zap.SugaredLogger {
-	return global.Logger(ctx).Named("{{.ServiceType}}Repo")
+	return global.Logger(c).Named("{{.ServiceType}}Repo")
 }
 
 `

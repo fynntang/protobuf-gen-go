@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 	"text/template"
@@ -28,6 +29,11 @@ var ProviderSet = wire.NewSet({{ range $index, $element := .FunctionNames }}{{ i
 	f := strings.Split(path, "V1")
 	filename := fmt.Sprintf("./internal/%s/repositories/wire.go", strings.ToLower(f[0]))
 
+	// 判断文件是否存在
+	if _, err := os.Stat(strings.TrimPrefix(filename, "../")); err == nil {
+		log.Println("文件已存在，跳过生成：", filename)
+		return nil
+	}
 	functions := []string{}
 	for _, set := range sets {
 		functions = append(functions, fmt.Sprintf("New%sRepo", set))

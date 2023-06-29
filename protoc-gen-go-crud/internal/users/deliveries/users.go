@@ -61,5 +61,5 @@ func (u UsersService) User(c *gin.Context, in *empty.Empty) (*components.User, e
 }
 
 func (u UsersService) Log(c *gin.Context) *zap.SugaredLogger {
-	return global.Logger(ctx).Named("UsersRepo")
+	return global.Logger(c).Named("UsersRepo")
 }

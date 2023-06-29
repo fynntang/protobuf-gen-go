@@ -12,5 +12,5 @@ func (a AuthService) ListMenus(c *gin.Context, in *empty.Empty) (*authorizationV
 }
 
 func (a AuthService) Log(c *gin.Context) *zap.SugaredLogger {
-	return global.Logger(ctx).Named("AuthRepo")
+	return global.Logger(c).Named("AuthRepo")
 }

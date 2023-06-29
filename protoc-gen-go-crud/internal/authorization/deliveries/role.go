@@ -29,5 +29,5 @@ func (r RoleService) UpdateRole(c *gin.Context, in *authorizationV1.UpdateRoleRe
 }
 
 func (r RoleService) Log(c *gin.Context) *zap.SugaredLogger {
-	return global.Logger(ctx).Named("RoleRepo")
+	return global.Logger(c).Named("RoleRepo")
 }
