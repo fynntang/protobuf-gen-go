@@ -1,7 +1,7 @@
 package entities
 
-type Users struct {
+type User struct {
 	entity.BaseEntity
 }
 
-func (u *Users) TableName() string { return "userss" }
+func (u *User) TableName() string { return "users" }

@@ -1,41 +1,41 @@
 package repositories
 
-type IUsersRepo interface {
-	CreateUsers(ctx context.Context, Users *entities.Users) error
-	UpdateUsers(ctx context.Context, updateFields []string, Users *entities.Users) error
-	GetUsers(ctx context.Context, id entity.ID) (*entities.Users, error)
-	GetUserss(ctx context.Context, filter *database.Filter) (res []*entities.User, count int64, err error)
-	DeleteUsers(ctx context.Context, id entity.ID) error
+type IUserRepo interface {
+	CreateUser(ctx context.Context, User *entities.User) error
+	UpdateUser(ctx context.Context, updateFields []string, User *entities.User) error
+	GetUser(ctx context.Context, id entity.ID) (*entities.User, error)
+	GetUsers(ctx context.Context, filter *database.Filter) (res []*entities.User, count int64, err error)
+	DeleteUser(ctx context.Context, id entity.ID) error
 	Log(ctx context.Context) *zap.SugaredLogger
 }
 
-type UsersRepo struct {
+type UserRepo struct {
 }
 
-func (u *UsersRepo) DB(ctx context.Context) *gorm.DB {
-	return global.DBFromContext(ctx).Model(&entities.Users{})
+func (u *UserRepo) DB(ctx context.Context) *gorm.DB {
+	return global.DBFromContext(ctx).Model(&entities.User{})
 }
 
-func (u UsersRepo) CreateUsers(ctx context.Context, users *entities.Users) error {
+func (u UserRepo) CreateUser(ctx context.Context, user *entities.User) error {
 	panic("todo")
 }
 
-func (u UsersRepo) UpdateUsers(ctx context.Context, updateFields []string, users *entities.Users) error {
+func (u UserRepo) UpdateUser(ctx context.Context, updateFields []string, user *entities.User) error {
 	panic("todo")
 }
 
-func (u UsersRepo) GetUsers(ctx context.Context, id entity.ID) (*entities.Users, error) {
+func (u UserRepo) GetUser(ctx context.Context, id entity.ID) (*entities.User, error) {
 	panic("todo")
 }
 
-func (u UsersRepo) DeleteUsers(ctx context.Context, id entity.ID) error {
+func (u UserRepo) DeleteUser(ctx context.Context, id entity.ID) error {
 	panic("todo")
 }
 
-func (u UsersRepo) GetUserss(ctx context.Context, filter *database.Filter) (res []*entities.Users, count int64, err error) {
+func (u UserRepo) GetUsers(ctx context.Context, filter *database.Filter) (res []*entities.User, count int64, err error) {
 	panic("todo")
 }
 
-func (u UsersRepo) Log(ctx context.Context) *zap.SugaredLogger {
-	return global.Logger(ctx).Named("UsersRepo")
+func (u UserRepo) Log(ctx context.Context) *zap.SugaredLogger {
+	return global.Logger(ctx).Named("UserRepo")
 }

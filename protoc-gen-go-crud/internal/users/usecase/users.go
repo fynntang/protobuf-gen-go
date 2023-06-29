@@ -1,41 +1,41 @@
 package usecase
 
-type IUsersUsecase interface {
-	CreateUsers(ctx context.Context, in *usersV1.CreateUsersRequest) error
-	UpdateUsers(ctx context.Context, in *usersV1.UpdateUsersRequest) error
-	DeleteUsers(ctx context.Context, in *usersV1.DeleteUsersRequest) error
-	GetUsers(ctx context.Context, in *usersV1.GetUsersRequest) (*entities.Users, error)
-	ListUsers(ctx context.Context, in *usersV1.ListUsersRequest) ([]*entities.Users, int64, error)
+type IUserUseCase interface {
+	CreateUser(ctx context.Context, in *usersV1.CreateUserRequest) error
+	UpdateUser(ctx context.Context, in *usersV1.UpdateUserRequest) error
+	DeleteUser(ctx context.Context, in *usersV1.DeleteUserRequest) error
+	GetUser(ctx context.Context, in *usersV1.GetUserRequest) (*entities.User, error)
+	ListUser(ctx context.Context, in *usersV1.ListUserRequest) ([]*entities.User, int64, error)
 	Log(ctx context.Context) *zap.SugaredLogger
 }
 
-type UsersUseCase struct {
+type UserUseCase struct {
 }
 
-func NewUsersUseCase() IUsersUsecase {
-	return &UsersUseCase{}
+func NewUserUseCase() IUserUseCase {
+	return &UserUseCase{}
 }
 
-func (u *UsersUseCase) CreateUsers(ctx context.Context, in *usersV1.CreateUsersRequest) error {
+func (u *UserUseCase) CreateUser(ctx context.Context, in *usersV1.CreateUserRequest) error {
 	panic("todo")
 }
 
-func (u *UsersUseCase) UpdateUsers(ctx context.Context, in *usersV1.UpdateUsersRequest) error {
+func (u *UserUseCase) UpdateUser(ctx context.Context, in *usersV1.UpdateUserRequest) error {
 	panic("todo")
 }
 
-func (u *UsersUseCase) DeleteUsers(ctx context.Context, in *usersV1.DeleteUsersRequest) error {
+func (u *UserUseCase) DeleteUser(ctx context.Context, in *usersV1.DeleteUserRequest) error {
 	panic("todo")
 }
 
-func (u *UsersUseCase) GetUsers(ctx context.Context, in *usersV1.GetUsersRequest) (*entities.Users, error) {
+func (u *UserUseCase) GetUser(ctx context.Context, in *usersV1.GetUserRequest) (*entities.User, error) {
 	panic("todo")
 }
 
-func (u *UsersUseCase) ListUsers(ctx context.Context, in *usersV1.ListUsersRequest) ([]*entities.Users, int64, error) {
+func (u *UserUseCase) ListUser(ctx context.Context, in *usersV1.ListUserRequest) ([]*entities.User, int64, error) {
 	panic("todo")
 }
 
-func (u UsersUseCase) Log(ctx context.Context) *zap.SugaredLogger {
-	return global.Logger(ctx).Named("UsersRepo")
+func (u UserUseCase) Log(ctx context.Context) *zap.SugaredLogger {
+	return global.Logger(ctx).Named("UserRepo")
 }

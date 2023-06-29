@@ -28,10 +28,11 @@ var ProviderSet = wire.NewSet({{ range $index, $element := .FunctionNames }}{{ i
 
 	f := strings.Split(path, "V1")
 	filename := fmt.Sprintf("./internal/%s/repositories/wire.go", strings.ToLower(f[0]))
+	dirname := fmt.Sprintf("./internal/%s", strings.ToLower(f[0]))
 
 	// 判断文件是否存在
-	if _, err := os.Stat(strings.TrimPrefix(filename, "../")); err == nil {
-		log.Println("文件已存在，跳过生成：", filename)
+	if _, err := os.Stat(strings.TrimPrefix(dirname, "../")); err == nil {
+		log.Println("目录已存在，跳过生成：", dirname)
 		return nil
 	}
 	functions := []string{}

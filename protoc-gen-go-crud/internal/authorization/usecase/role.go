@@ -1,6 +1,6 @@
 package usecase
 
-type IRoleUsecase interface {
+type IRoleUseCase interface {
 	CreateRole(ctx context.Context, in *authorizationV1.CreateRoleRequest) error
 	UpdateRole(ctx context.Context, in *authorizationV1.UpdateRoleRequest) error
 	DeleteRole(ctx context.Context, in *authorizationV1.DeleteRoleRequest) error
@@ -12,7 +12,7 @@ type IRoleUsecase interface {
 type RoleUseCase struct {
 }
 
-func NewRoleUseCase() IRoleUsecase {
+func NewRoleUseCase() IRoleUseCase {
 	return &RoleUseCase{}
 }
 

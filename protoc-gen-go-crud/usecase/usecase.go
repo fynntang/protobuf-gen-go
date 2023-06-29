@@ -22,10 +22,11 @@ func GenerateUseCasesFile(gen *protogen.Plugin, file *protogen.File, omitempty b
 
 	filePrefix := strings.Split(file.GeneratedFilenamePrefix, "/")
 	filename := "../internal/" + filePrefix[1] + "/usecase/" + filePrefix[2] + ".go"
+	dirname := "../internal/" + filePrefix[1]
 
 	// 判断文件是否存在
-	if _, err := os.Stat(strings.TrimPrefix(filename, "../")); err == nil {
-		log.Println("文件已存在，跳过生成：", filename)
+	if _, err := os.Stat(strings.TrimPrefix(dirname, "../")); err == nil {
+		log.Println("目录已存在，跳过生成：", dirname)
 		return nil
 	}
 

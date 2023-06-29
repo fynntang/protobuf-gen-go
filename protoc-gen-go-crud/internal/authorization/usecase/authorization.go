@@ -1,6 +1,6 @@
 package usecase
 
-type IAuthUsecase interface {
+type IAuthUseCase interface {
 	CreateAuth(ctx context.Context, in *authorizationV1.CreateAuthRequest) error
 	UpdateAuth(ctx context.Context, in *authorizationV1.UpdateAuthRequest) error
 	DeleteAuth(ctx context.Context, in *authorizationV1.DeleteAuthRequest) error
@@ -12,7 +12,7 @@ type IAuthUsecase interface {
 type AuthUseCase struct {
 }
 
-func NewAuthUseCase() IAuthUsecase {
+func NewAuthUseCase() IAuthUseCase {
 	return &AuthUseCase{}
 }
 
