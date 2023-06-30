@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"path/filepath"
 	"strings"
 	"text/template"
 )
@@ -52,13 +51,13 @@ var ProviderSet = wire.NewSet({{ range $index, $element := .FunctionNames }}{{ i
 	}
 
 	// 目录检查
-	dir := filepath.Dir(filename)
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		err := os.MkdirAll(dir, 0755)
-		if err != nil {
-			log.Fatalf("failed to create directory: %v", err)
-		}
-	}
+	//dir := filepath.Dir(filename)
+	//if _, err := os.Stat(dir); os.IsNotExist(err) {
+	//	err := os.MkdirAll(dir, 0755)
+	//	if err != nil {
+	//		log.Fatalf("failed to create directory: %v", err)
+	//	}
+	//}
 
 	// 检查文件是否存在，如果不存在则创建它
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
