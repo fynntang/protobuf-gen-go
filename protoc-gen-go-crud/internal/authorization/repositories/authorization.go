@@ -4,7 +4,7 @@ type IAuthRepo interface {
 	CreateAuth(ctx context.Context, Auth *entities.Auth) error
 	UpdateAuth(ctx context.Context, updateFields []string, Auth *entities.Auth) error
 	GetAuth(ctx context.Context, id entity.ID) (*entities.Auth, error)
-	GetAuths(ctx context.Context, filter *database.Filter) (res []*entities.User, count int64, err error)
+	GetAuths(ctx context.Context, filter *database.Filter) (res []*entities.Auth, count int64, err error)
 	DeleteAuth(ctx context.Context, id entity.ID) error
 	Log(ctx context.Context) *zap.SugaredLogger
 }
@@ -38,4 +38,8 @@ func (a AuthRepo) GetAuths(ctx context.Context, filter *database.Filter) (res []
 
 func (a AuthRepo) Log(ctx context.Context) *zap.SugaredLogger {
 	return global.Logger(ctx).Named("AuthRepo")
+}
+
+func NewAuthRepo() IAuthRepo {
+	return &AuthRepo{}
 }

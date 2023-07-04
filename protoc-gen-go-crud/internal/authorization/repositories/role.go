@@ -4,7 +4,7 @@ type IRoleRepo interface {
 	CreateRole(ctx context.Context, Role *entities.Role) error
 	UpdateRole(ctx context.Context, updateFields []string, Role *entities.Role) error
 	GetRole(ctx context.Context, id entity.ID) (*entities.Role, error)
-	GetRoles(ctx context.Context, filter *database.Filter) (res []*entities.User, count int64, err error)
+	GetRoles(ctx context.Context, filter *database.Filter) (res []*entities.Role, count int64, err error)
 	DeleteRole(ctx context.Context, id entity.ID) error
 	Log(ctx context.Context) *zap.SugaredLogger
 }
@@ -38,4 +38,8 @@ func (r RoleRepo) GetRoles(ctx context.Context, filter *database.Filter) (res []
 
 func (r RoleRepo) Log(ctx context.Context) *zap.SugaredLogger {
 	return global.Logger(ctx).Named("RoleRepo")
+}
+
+func NewRoleRepo() IRoleRepo {
+	return &RoleRepo{}
 }

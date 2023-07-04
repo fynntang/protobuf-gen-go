@@ -12,7 +12,7 @@ type I{{.ServiceType}}Repo interface {
 	Create{{.ServiceType}}(ctx context.Context, {{.ServiceType}} *entities.{{.ServiceType}}) error
 	Update{{.ServiceType}}(ctx context.Context, updateFields []string,{{.ServiceType}} *entities.{{.ServiceType}}) error
 	Get{{.ServiceType}}(ctx context.Context, id entity.ID) (*entities.{{.ServiceType}}, error)
-	Get{{.ServiceType}}s(ctx context.Context, filter *database.Filter) (res []*entities.User, count int64, err error)
+	Get{{.ServiceType}}s(ctx context.Context, filter *database.Filter) (res []*entities.{{.ServiceType}}, count int64, err error)
 	Delete{{.ServiceType}}(ctx context.Context, id entity.ID) error
 	Log(ctx context.Context) *zap.SugaredLogger
 }
@@ -53,7 +53,9 @@ func ({{$firstLetter}} {{.ServiceType}}Repo) Log(ctx context.Context) *zap.Sugar
 	return global.Logger(ctx).Named("{{.ServiceType}}Repo")
 }
 
-
+func New{{.ServiceType}}Repo() I{{.ServiceType}}Repo{
+	return &{{.ServiceType}}Repo{}
+}
 `
 
 type serviceDesc struct {

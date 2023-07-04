@@ -39,3 +39,7 @@ func (u UserRepo) GetUsers(ctx context.Context, filter *database.Filter) (res []
 func (u UserRepo) Log(ctx context.Context) *zap.SugaredLogger {
 	return global.Logger(ctx).Named("UserRepo")
 }
+
+func NewUserRepo() IUserRepo {
+	return &UserRepo{}
+}
