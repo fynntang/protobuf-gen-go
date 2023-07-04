@@ -55,6 +55,7 @@ func genService(_ *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFi
 		ServiceType: service.GoName,
 		ServiceName: string(service.Desc.FullName()),
 		Metadata:    file.Desc.Path(),
+		PackageName: string(file.GoPackageName),
 	}
 
 	for _, method := range service.Methods {

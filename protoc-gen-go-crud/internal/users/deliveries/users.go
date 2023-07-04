@@ -6,6 +6,7 @@ import (
 )
 
 type UserService struct {
+	uc usecase.IUserUseCase
 }
 
 func (u UserService) ChangePassword(c *gin.Context, in *usersV1.ChangePasswordRequest) (*empty.Empty, error) {
@@ -62,4 +63,10 @@ func (u UserService) User(c *gin.Context, in *empty.Empty) (*components.User, er
 
 func (u UserService) Log(c *gin.Context) *zap.SugaredLogger {
 	return global.Logger(c).Named("UserRepo")
+}
+
+func NewUserService(uc usecase.IUserUseCase) usersV1.UserHTTPServer {
+	return &UserService{
+		uc: uc,
+	}
 }

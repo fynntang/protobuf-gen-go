@@ -7,17 +7,20 @@ import (
 )
 
 var crudTemplate = `
-type {{.ServiceType}}Service struct {
-}
+
 
 {{$firstLetter := (GetFirstLetter .ServiceType)}}
+{{$packageName := .PackageName}}
 {{$svrType := .ServiceType}}
 {{$svrName := .ServiceName}}
+
+type {{.ServiceType}}Service struct {
+	{{$firstLetter}}c usecase.I{{.ServiceType}}UseCase
+}
+
 {{- range .MethodSets}}
 {{$request := .Request}}
 {{$reply := .Reply}}
-
-
 {{- if not (IsHasPackagePrefix .Request)}}
 {{$request = printf "%s.%s" .PackageName .Request}}
 {{- end}}
@@ -35,6 +38,15 @@ func ({{$firstLetter}} {{.ServiceType}}Service) Log(c *gin.Context) *zap.Sugared
 	return global.Logger(c).Named("{{.ServiceType}}Repo")
 }
 
+func New{{.ServiceType}}Service({{$firstLetter}}c usecase.I{{$svrType}}UseCase) {{$packageName}}.{{.ServiceType}}HTTPServer{
+	return &{{.ServiceType}}Service{
+		{{$firstLetter}}c: {{$firstLetter}}c,
+	}
+}
+
+
+
+
 `
 
 type serviceDesc struct {
@@ -43,6 +55,7 @@ type serviceDesc struct {
 	Metadata    string // api/helloworld/helloworld.proto
 	Methods     []*methodDesc
 	MethodSets  map[string]*methodDesc
+	PackageName string
 }
 
 type methodDesc struct {

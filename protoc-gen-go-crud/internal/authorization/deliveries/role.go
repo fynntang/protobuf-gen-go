@@ -1,11 +1,15 @@
 package deliveries
 
 import (
+	authorizationV1 "github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/api/v1/authorization"
 	components "github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/api/v1/components"
+	"github.com/fynntang/protobuf-gen-go/protoc-gen-go-crud/internal/authorization/usecase"
+	"github.com/gin-gonic/gin"
 	empty "github.com/golang/protobuf/ptypes/empty"
 )
 
 type RoleService struct {
+	rc usecase.IRoleUseCase
 }
 
 func (r RoleService) CreateRole(c *gin.Context, in *authorizationV1.CreateRoleRequest) (*empty.Empty, error) {
@@ -30,4 +34,10 @@ func (r RoleService) UpdateRole(c *gin.Context, in *authorizationV1.UpdateRoleRe
 
 func (r RoleService) Log(c *gin.Context) *zap.SugaredLogger {
 	return global.Logger(c).Named("RoleRepo")
+}
+
+func NewRoleService(rc usecase.IRoleUseCase) authorizationV1.RoleHTTPServer {
+	return &RoleService{
+		rc: rc,
+	}
 }
