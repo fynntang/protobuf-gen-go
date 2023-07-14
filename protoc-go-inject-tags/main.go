@@ -24,13 +24,9 @@ var (
 	pbFiles        []string
 	fset           *token.FileSet
 	tagsValue      []string
-	ignoreFields   []ignoreField
+	ignoreFields   []string
+	ignoreFieldVal = make(map[string]string)
 )
-
-type ignoreField struct {
-	tag   string
-	field string
-}
 
 func init() {
 	flag.StringVar(&tags, "tags", "", "tags for struct eg: json,xml")
@@ -68,11 +64,13 @@ func checkArgs() {
 
 	if ignore != "" {
 		for _, s := range strings.Split(ignore, ",") {
-			ignore := strings.Split(s, ":")
-			if len(ignore) != 2 {
+			i := strings.Split(s, ":")
+			if len(i) != 2 {
 				log.Fatalf("ignore field %s format error", s)
 			}
-			ignoreFields = append(ignoreFields, ignoreField{tag: ignore[0], field: ignore[1]})
+			key := fmt.Sprintf(`%s:"%s,omitempty"`, i[0], i[1])
+			ignoreFields = append(ignoreFields, key)
+			ignoreFieldVal[key] = fmt.Sprintf(`%s:"-"`, i[0])
 		}
 	}
 }
@@ -159,16 +157,6 @@ func handleTags(fields *ast.FieldList) {
 				continue
 			}
 
-			if len(ignoreFields) > 0 {
-				for _, igno := range ignoreFields {
-					if igno.tag == tag && igno.field == newName {
-						fieldTags[tag] = &fieldTag{tagName: tag, tagValue: "-"}
-						sortTags = append(sortTags, tag)
-						continue
-					}
-				}
-			}
-
 			fieldTags[tag] = &fieldTag{tagName: tag, tagValue: fmt.Sprintf("%s,omitempty", newName)}
 			sortTags = append(sortTags, tag)
 		}
@@ -177,6 +165,13 @@ func handleTags(fields *ast.FieldList) {
 		for _, tag := range sortTags {
 			newTags += fmt.Sprintf("%s:\"%s\" ", fieldTags[tag].tagName, fieldTags[tag].tagValue)
 		}
+
+		for _, v := range ignoreFields {
+			if vv, ok := ignoreFieldVal[v]; ok {
+				newTags = strings.ReplaceAll(newTags, v, vv)
+			}
+		}
+
 		field.Tag.Value = fmt.Sprintf("`%s`", newTags)
 	}
 }
