@@ -19,15 +19,23 @@ import (
 var (
 	tags           string
 	folder         string
+	ignore         string
 	relativeFolder string
 	pbFiles        []string
 	fset           *token.FileSet
 	tagsValue      []string
+	ignoreFields   []ignoreField
 )
 
+type ignoreField struct {
+	tag   string
+	field string
+}
+
 func init() {
-	flag.StringVar(&tags, "tags", "", "tags for struct")
-	flag.StringVar(&folder, "folder", "", "paths for struct")
+	flag.StringVar(&tags, "tags", "", "tags for struct eg: json,xml")
+	flag.StringVar(&folder, "folder", "", "paths for struct eg: ./pb")
+	flag.StringVar(&ignore, "ignore", "", "ignore fields for struct eg: form:file,json:file")
 	fset = token.NewFileSet()
 }
 func main() {
@@ -57,6 +65,16 @@ func checkArgs() {
 	}
 
 	tagsValue = strings.Split(tags, ",")
+
+	if ignore != "" {
+		for _, s := range strings.Split(ignore, ",") {
+			ignore := strings.Split(s, ":")
+			if len(ignore) != 2 {
+				log.Fatalf("ignore field %s format error", s)
+			}
+			ignoreFields = append(ignoreFields, ignoreField{tag: ignore[0], field: ignore[1]})
+		}
+	}
 }
 
 func walkFolder(folderPath string) {
@@ -140,6 +158,17 @@ func handleTags(fields *ast.FieldList) {
 			if _, ok := fieldTags[tag]; ok {
 				continue
 			}
+
+			if len(ignoreFields) > 0 {
+				for _, igno := range ignoreFields {
+					if igno.tag == tag && igno.field == newName {
+						fieldTags[tag] = &fieldTag{tagName: tag, tagValue: "-"}
+						sortTags = append(sortTags, tag)
+						continue
+					}
+				}
+			}
+
 			fieldTags[tag] = &fieldTag{tagName: tag, tagValue: fmt.Sprintf("%s,omitempty", newName)}
 			sortTags = append(sortTags, tag)
 		}
