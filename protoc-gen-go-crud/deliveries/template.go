@@ -18,6 +18,16 @@ type {{.ServiceType}}Service struct {
 	{{$firstLetter}}c usecase.I{{.ServiceType}}UseCase
 }
 
+func New{{.ServiceType}}Service({{$firstLetter}}c usecase.I{{$svrType}}UseCase) {{$packageName}}.{{.ServiceType}}HTTPServer{
+	return &{{.ServiceType}}Service{
+		{{$firstLetter}}c: {{$firstLetter}}c,
+	}
+}
+
+func (s *{{.ServiceType}}Service) log(ctx context.Context) *zap.SugaredLogger {
+	return global.Logger(ctx).Named("{{.ServiceType}}Service")
+}
+
 {{- range .MethodSets}}
 {{$request := .Request}}
 {{$reply := .Reply}}
@@ -29,23 +39,11 @@ type {{.ServiceType}}Service struct {
 {{$reply = printf "%s.%s" .PackageName .Reply}}
 {{- end}}
 
-func ({{$firstLetter}} {{$svrType}}Service){{.OriginalName}}(c *gin.Context, in *{{$request}})(*{{$reply}},error) {
-	panic("todo")
+func (s *{{$svrType}}Service){{.OriginalName}}(c *gin.Context, in *{{$request}})(*{{$reply}},error) {
+	//TODO implement me
+	panic("implement me")
 }
 {{- end}}
-
-func ({{$firstLetter}} {{.ServiceType}}Service) Log(c *gin.Context) *zap.SugaredLogger {
-	return global.Logger(c).Named("{{.ServiceType}}Repo")
-}
-
-func New{{.ServiceType}}Service({{$firstLetter}}c usecase.I{{$svrType}}UseCase) {{$packageName}}.{{.ServiceType}}HTTPServer{
-	return &{{.ServiceType}}Service{
-		{{$firstLetter}}c: {{$firstLetter}}c,
-	}
-}
-
-
-
 
 `
 

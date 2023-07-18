@@ -12,44 +12,50 @@ var crudTemplate = `
 
 
 type I{{.ServiceType}}UseCase interface {
+	log(ctx context.Context) *zap.SugaredLogger
 	Create{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Create{{.ServiceType}}Request) error
 	Update{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Update{{.ServiceType}}Request) error
 	Delete{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Delete{{.ServiceType}}Request) error
 	Get{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Get{{.ServiceType}}Request) (*entities.{{.ServiceType}},error)
 	List{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.List{{.ServiceType}}Request) ([]*entities.{{.ServiceType}},int64,error)
-	Log(ctx context.Context) *zap.SugaredLogger
 }
 
-type {{.ServiceType}}UseCase struct {
-}
+type {{.ServiceType}}UseCase struct {}
 
 func New{{.ServiceType}}UseCase() I{{.ServiceType}}UseCase {
 	return &{{.ServiceType}}UseCase{}
 }
 
-func ({{$firstLetter}} *{{.ServiceType}}UseCase) Create{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Create{{.ServiceType}}Request) error {
-	panic("todo")
+func (uc *{{.ServiceType}}UseCase) log(ctx context.Context) *zap.SugaredLogger {
+	return global.Logger(ctx).Named("{{.ServiceType}}UseCase")
 }
 
-func ({{$firstLetter}} *{{.ServiceType}}UseCase) Update{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Update{{.ServiceType}}Request) error {
-	panic("todo")
+func (uc *{{.ServiceType}}UseCase) Create{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Create{{.ServiceType}}Request) error {
+	//TODO implement me
+	panic("implement me")
 }
 
-func ({{$firstLetter}} *{{.ServiceType}}UseCase) Delete{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Delete{{.ServiceType}}Request) error{
-	panic("todo")
+func (uc *{{.ServiceType}}UseCase) Update{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Update{{.ServiceType}}Request) error {
+	//TODO implement me
+	panic("implement me")
 }
 
-func ({{$firstLetter}} *{{.ServiceType}}UseCase) Get{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Get{{.ServiceType}}Request) (*entities.{{.ServiceType}},error){
-	panic("todo")
+func (uc *{{.ServiceType}}UseCase) Delete{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Delete{{.ServiceType}}Request) error{
+	//TODO implement me
+	panic("implement me")
 }
 
-func ({{$firstLetter}} *{{.ServiceType}}UseCase) List{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.List{{.ServiceType}}Request) ([]*entities.{{.ServiceType}},int64,error){
-	panic("todo")
+func (uc *{{.ServiceType}}UseCase) Get{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.Get{{.ServiceType}}Request) (*entities.{{.ServiceType}},error){
+	//TODO implement me
+	panic("implement me")
 }
 
-func ({{$firstLetter}} {{.ServiceType}}UseCase) Log(ctx context.Context) *zap.SugaredLogger {
-	return global.Logger(ctx).Named("{{.ServiceType}}Repo")
+func (uc *{{.ServiceType}}UseCase) List{{.ServiceType}}(ctx context.Context,in *{{.PackageName}}.List{{.ServiceType}}Request) ([]*entities.{{.ServiceType}},int64,error){
+	//TODO implement me
+	panic("implement me")
 }
+
+
 
 `
 
