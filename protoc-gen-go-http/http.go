@@ -213,6 +213,7 @@ func buildMethodDesc(g *protogen.GeneratedFile, m *protogen.Method, method, path
 		Request:      g.QualifiedGoIdent(m.Input.GoIdent),
 		Reply:        g.QualifiedGoIdent(m.Output.GoIdent),
 		Comment:      comment,
+		Comment2:     m.Comments.Trailing.String(),
 		Path:         replacePathToGinPath(path),
 		Method:       method,
 		HasVars:      len(vars) > 0,
