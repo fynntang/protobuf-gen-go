@@ -28,11 +28,11 @@ func New{{.ServiceType}}Repo() I{{.ServiceType}}Repo{
 	return &{{.ServiceType}}Repo{}
 }
 
-func ({{$firstLetter}} *{{.ServiceType}}Repo) log(ctx context.Context) *zap.SugaredLogger {
+func (r *{{.ServiceType}}Repo) log(ctx context.Context) *zap.SugaredLogger {
 	return global.Logger(ctx).Named("{{.ServiceType}}Repo")
 }
 
-func ({{$firstLetter}} *{{.ServiceType}}Repo) DB(ctx context.Context) *gorm.DB {
+func (r *{{.ServiceType}}Repo) DB(ctx context.Context) *gorm.DB {
 	return global.DBFromContext(ctx).Model(&entities.{{.ServiceType}}{})
 }
 
