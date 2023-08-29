@@ -207,16 +207,16 @@ func buildMethodDesc(g *protogen.GeneratedFile, m *protogen.Method, method, path
 		comment = "// " + m.GoName + strings.TrimPrefix(strings.TrimSuffix(comment, "\n"), "//")
 	}
 	return &methodDesc{
-		Name:         m.GoName,
-		OriginalName: string(m.Desc.Name()),
-		Num:          methodSets[m.GoName],
-		Request:      g.QualifiedGoIdent(m.Input.GoIdent),
-		Reply:        g.QualifiedGoIdent(m.Output.GoIdent),
-		Comment:      comment,
-		Comment2:     m.Comments.Trailing.String(),
-		Path:         replacePathToGinPath(path),
-		Method:       method,
-		HasVars:      len(vars) > 0,
+		Name:            m.GoName,
+		OriginalName:    string(m.Desc.Name()),
+		Num:             methodSets[m.GoName],
+		Request:         g.QualifiedGoIdent(m.Input.GoIdent),
+		Reply:           g.QualifiedGoIdent(m.Output.GoIdent),
+		Comment:         comment,
+		OriginalComment: strings.ReplaceAll(comment, string(m.Desc.Name())+" ", ""),
+		Path:            replacePathToGinPath(path),
+		Method:          method,
+		HasVars:         len(vars) > 0,
 	}
 }
 

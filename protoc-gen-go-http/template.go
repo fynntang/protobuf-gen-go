@@ -11,7 +11,7 @@ var httpTemplate = `
 {{$svrName := .ServiceName}}
 
 {{- range .MethodSets}}
-const Route{{$svrType}}{{.OriginalName}} = "{{.Path}}" {{- if ne .Comment2 ""}} {{.Comment2}} {{- end}}
+const Route{{$svrType}}{{.OriginalName}} = "{{.Path}}" {{- if ne .OriginalComment ""}} {{.OriginalComment}} {{- end}}
 {{- end}}
 
 type {{.ServiceType}}HTTPServer interface {
@@ -102,13 +102,13 @@ type serviceDesc struct {
 
 type methodDesc struct {
 	// method
-	Name         string
-	OriginalName string // The parsed original name
-	Num          int
-	Request      string
-	Reply        string
-	Comment      string
-	Comment2     string
+	Name            string
+	OriginalName    string // The parsed original name
+	Num             int
+	Request         string
+	Reply           string
+	Comment         string
+	OriginalComment string
 	// http_rule
 	Path         string
 	Method       string
