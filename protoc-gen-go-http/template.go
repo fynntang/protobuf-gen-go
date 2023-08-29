@@ -11,7 +11,7 @@ var httpTemplate = `
 {{$svrName := .ServiceName}}
 
 {{- range .MethodSets}}
-const Route{{$svrType}}{{.OriginalName}} = "{{.Path}}"
+const Route{{$svrType}}{{.OriginalName}} = "{{.Path}}" {{- if ne .Comment ""}} {{.Comment}} {{- end}}
 {{- end}}
 
 type {{.ServiceType}}HTTPServer interface {
