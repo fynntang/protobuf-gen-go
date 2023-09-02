@@ -10,6 +10,18 @@ var httpTemplate = `
 {{$svrType := .ServiceType}}
 {{$svrName := .ServiceName}}
 
+
+
+{{- range .MethodSets}}
+	{{ $pclen := len .PermissionCodes }} 
+	{{ if gt $pclen 1 }}
+		{{- range $k,$v := .PermissionCodes}}
+			const PermissionCode{{$k}} = "{{$v}}"
+		{{- end}}
+	{{ end }}
+{{- end}}
+
+
 {{- range .MethodSets}}
 const Route{{$svrType}}{{.OriginalName}} = "{{.Path}}" {{- if ne .OriginalComment ""}} {{.OriginalComment}} {{.Method}}{{- end}}
 {{- end}}
@@ -109,6 +121,7 @@ type methodDesc struct {
 	Reply           string
 	Comment         string
 	OriginalComment string
+	PermissionCodes map[string]string
 	// http_rule
 	Path         string
 	Method       string

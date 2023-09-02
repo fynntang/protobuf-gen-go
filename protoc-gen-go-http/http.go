@@ -206,6 +206,18 @@ func buildMethodDesc(g *protogen.GeneratedFile, m *protogen.Method, method, path
 	if comment != "" {
 		comment = "// " + m.GoName + strings.TrimPrefix(strings.TrimSuffix(comment, "\n"), "//")
 	}
+	originalComment := strings.ReplaceAll(comment, string(m.Desc.Name())+" ", "")
+	permissionCodes := make(map[string]string)
+	if permissionValues := strings.Split(originalComment, "|"); len(permissionValues) > 1 {
+		for _, v := range strings.Split(strings.Split(strings.Trim(permissionValues[1], " "), " ")[0], "/") {
+			permissionCode := ""
+			for _, code := range strings.Split(v, ":") {
+				permissionCode = permissionCode + strings.ToUpper(code[:1]) + code[1:]
+			}
+			permissionCodes[permissionCode] = v
+		}
+	}
+
 	return &methodDesc{
 		Name:            m.GoName,
 		OriginalName:    string(m.Desc.Name()),
@@ -213,7 +225,8 @@ func buildMethodDesc(g *protogen.GeneratedFile, m *protogen.Method, method, path
 		Request:         g.QualifiedGoIdent(m.Input.GoIdent),
 		Reply:           g.QualifiedGoIdent(m.Output.GoIdent),
 		Comment:         comment,
-		OriginalComment: strings.ReplaceAll(comment, string(m.Desc.Name())+" ", ""),
+		OriginalComment: originalComment,
+		PermissionCodes: permissionCodes,
 		Path:            replacePathToGinPath(path),
 		Method:          method,
 		HasVars:         len(vars) > 0,
