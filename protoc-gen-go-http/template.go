@@ -10,17 +10,10 @@ var httpTemplate = `
 {{$svrType := .ServiceType}}
 {{$svrName := .ServiceName}}
 
-
-
-{{- range .MethodSets}}
-	{{ $pclen := len .PermissionCodes }} 
-	{{ if gt $pclen 1 }}
-		{{- range $k,$v := .PermissionCodes}}
-			const PermissionCode{{$k}} = "{{$v}}"
-		{{- end}}
-	{{ end }}
+{{- range .PermissionCodes}}
+	const PermissionCode{{.Name}} = "{{.Code}}"
 {{- end}}
-
+// 
 
 {{- range .MethodSets}}
 const Route{{$svrType}}{{.OriginalName}} = "{{.Path}}" {{- if ne .OriginalComment ""}} {{.OriginalComment}} {{.Method}}{{- end}}
@@ -104,12 +97,18 @@ func _{{$svrType}}_{{.Name}}{{.Num}}_HTTP_Handler(srv {{$svrType}}HTTPServer) gi
 {{end}}
 `
 
+type permissionCode struct {
+	Name string
+	Code string
+}
+
 type serviceDesc struct {
-	ServiceType string // Greeter
-	ServiceName string // helloworld.Greeter
-	Metadata    string // api/helloworld/helloworld.proto
-	Methods     []*methodDesc
-	MethodSets  map[string]*methodDesc
+	ServiceType     string // Greeter
+	ServiceName     string // helloworld.Greeter
+	Metadata        string // api/helloworld/helloworld.proto
+	Methods         []*methodDesc
+	MethodSets      map[string]*methodDesc
+	PermissionCodes []*permissionCode
 }
 
 type methodDesc struct {
@@ -121,7 +120,7 @@ type methodDesc struct {
 	Reply           string
 	Comment         string
 	OriginalComment string
-	PermissionCodes map[string]string
+	PermissionCodes []*permissionCode
 	// http_rule
 	Path         string
 	Method       string

@@ -85,9 +85,13 @@ func genService(_ *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFi
 		rule, ok := proto.GetExtension(method.Desc.Options(), annotations.E_Http).(*annotations.HttpRule)
 		if rule != nil && ok {
 			for _, bind := range rule.AdditionalBindings {
-				sd.Methods = append(sd.Methods, buildHTTPRule(g, method, bind))
+				md := buildHTTPRule(g, method, bind)
+				sd.Methods = append(sd.Methods, md)
+				sd.PermissionCodes = append(sd.PermissionCodes, md.PermissionCodes...)
 			}
-			sd.Methods = append(sd.Methods, buildHTTPRule(g, method, rule))
+			md := buildHTTPRule(g, method, rule)
+			sd.Methods = append(sd.Methods, md)
+			sd.PermissionCodes = append(sd.PermissionCodes, md.PermissionCodes...)
 		} else if !omitempty {
 			path := fmt.Sprintf("/%s/%s", service.Desc.FullName(), method.Desc.Name())
 			sd.Methods = append(sd.Methods, buildMethodDesc(g, method, http.MethodPost, path))
@@ -207,14 +211,15 @@ func buildMethodDesc(g *protogen.GeneratedFile, m *protogen.Method, method, path
 		comment = "// " + m.GoName + strings.TrimPrefix(strings.TrimSuffix(comment, "\n"), "//")
 	}
 	originalComment := strings.ReplaceAll(comment, string(m.Desc.Name())+" ", "")
-	permissionCodes := make(map[string]string)
+
+	var permissionCodes []*permissionCode
 	if permissionValues := strings.Split(originalComment, "|"); len(permissionValues) > 1 {
 		for _, v := range strings.Split(strings.Split(strings.Trim(permissionValues[1], " "), " ")[0], "/") {
-			permissionCode := ""
+			permissionCodeName := ""
 			for _, code := range strings.Split(v, ":") {
-				permissionCode = permissionCode + strings.ToUpper(code[:1]) + code[1:]
+				permissionCodeName = permissionCodeName + strings.ToUpper(code[:1]) + code[1:]
 			}
-			permissionCodes[permissionCode] = v
+			permissionCodes = append(permissionCodes, &permissionCode{Name: permissionCodeName, Code: v})
 		}
 	}
 
