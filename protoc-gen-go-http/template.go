@@ -10,11 +10,6 @@ var httpTemplate = `
 {{$svrType := .ServiceType}}
 {{$svrName := .ServiceName}}
 
-{{- range .PermissionCodes}}
-	const PermissionCode{{.Name}} = "{{.Code}}"
-{{- end}}
-// 
-
 {{- range .MethodSets}}
 const Route{{$svrType}}{{.OriginalName}} = "{{.Path}}" {{- if ne .OriginalComment ""}} {{.OriginalComment}} {{.Method}}{{- end}}
 {{- end}}

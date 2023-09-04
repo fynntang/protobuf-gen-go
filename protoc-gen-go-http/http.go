@@ -85,13 +85,9 @@ func genService(_ *protogen.Plugin, file *protogen.File, g *protogen.GeneratedFi
 		rule, ok := proto.GetExtension(method.Desc.Options(), annotations.E_Http).(*annotations.HttpRule)
 		if rule != nil && ok {
 			for _, bind := range rule.AdditionalBindings {
-				md := buildHTTPRule(g, method, bind)
-				sd.Methods = append(sd.Methods, md)
-				sd.PermissionCodes = append(sd.PermissionCodes, md.PermissionCodes...)
+				sd.Methods = append(sd.Methods, buildHTTPRule(g, method, bind))
 			}
-			md := buildHTTPRule(g, method, rule)
-			sd.Methods = append(sd.Methods, md)
-			sd.PermissionCodes = append(sd.PermissionCodes, md.PermissionCodes...)
+			sd.Methods = append(sd.Methods, buildHTTPRule(g, method, rule))
 		} else if !omitempty {
 			path := fmt.Sprintf("/%s/%s", service.Desc.FullName(), method.Desc.Name())
 			sd.Methods = append(sd.Methods, buildMethodDesc(g, method, http.MethodPost, path))
