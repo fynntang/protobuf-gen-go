@@ -34,7 +34,6 @@ func init() {
 	flag.StringVar(&ignore, "ignore", "", "ignore fields for struct eg: form:file,json:file")
 	fset = token.NewFileSet()
 }
-
 func main() {
 	flag.Parse()
 
@@ -132,51 +131,39 @@ func handleTags(fields *ast.FieldList) {
 			continue
 		}
 
-		var jsonName string
+		var newName string
 		for _, name := range field.Names {
-			jsonName = strings.ToLower(strings.Join(camelcase.Split(name.Name), "_"))
+			newName = strings.ToLower(strings.Join(camelcase.Split(name.Name), "_"))
 		}
+
 		tv := strings.ReplaceAll(field.Tag.Value, "`", "")
 		tagList := strings.Split(tv, " ")
-		fieldTags := make(map[string]*fieldTag)
+		fieldTags := make(map[string]*fieldTag, 0)
 		var sortTags []string
-
 		for _, t := range tagList {
 			tf := strings.Split(t, ":")
 			if len(tf) != 2 {
 				continue
 			}
-			tagName := strings.TrimSpace(tf[0])
-			tagValue := strings.Replace(tf[1], "\"", "", -1)
-			fieldTags[tagName] = &fieldTag{
-				tagName:  tagName,
-				tagValue: tagValue,
+			fieldTags[tf[0]] = &fieldTag{
+				tagName:  strings.TrimSpace(tf[0]),
+				tagValue: strings.Replace(tf[1], "\"", "", -1),
 			}
-			sortTags = append(sortTags, tagName)
-
-			if tagName == "protobuf" {
-				if jsonIndex := strings.Index(tagValue, "json="); jsonIndex != -1 {
-					jsonValue := tagValue[jsonIndex+5:]
-					jsonValue = strings.Split(jsonValue, ",")[0]
-					jsonName = jsonValue
-				}
-			}
+			sortTags = append(sortTags, tf[0])
 		}
 
 		for _, tag := range tagsValue {
-			fieldTags[tag] = &fieldTag{tagName: tag, tagValue: fmt.Sprintf("%s,omitempty", jsonName)}
+			if _, ok := fieldTags[tag]; ok {
+				continue
+			}
+
+			fieldTags[tag] = &fieldTag{tagName: tag, tagValue: fmt.Sprintf("%s,omitempty", newName)}
 			sortTags = append(sortTags, tag)
 		}
 
-		fieldTags["json"] = &fieldTag{tagName: "json", tagValue: fmt.Sprintf("%s,omitempty", jsonName)}
-
 		var newTags string
-		seenTags := make(map[string]bool)
 		for _, tag := range sortTags {
-			if !seenTags[tag] {
-				newTags += fmt.Sprintf("%s:\"%s\" ", fieldTags[tag].tagName, fieldTags[tag].tagValue)
-				seenTags[tag] = true
-			}
+			newTags += fmt.Sprintf("%s:\"%s\" ", fieldTags[tag].tagName, fieldTags[tag].tagValue)
 		}
 
 		for _, v := range ignoreFields {
@@ -185,6 +172,6 @@ func handleTags(fields *ast.FieldList) {
 			}
 		}
 
-		field.Tag.Value = fmt.Sprintf("`%s`", strings.TrimSpace(newTags))
+		field.Tag.Value = fmt.Sprintf("`%s`", newTags)
 	}
 }
